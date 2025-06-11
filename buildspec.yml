@@ -6,16 +6,19 @@ phases:
       python: 3.11
   build:
     commands:
-      - echo "📦 Updating version in package.json"
-      - VERSION="$MAJOR.$MINOR.$PATCH"
-      - echo "✔ Version from pipeline: $VERSION"
-      
-      # Use jq to update package.json version
-      - jq --arg v "$VERSION" '.version = $v' package.json > tmp.json && mv tmp.json package.json
-      
+      - echo "✔ Version from pipeline: $MAJOR.$MINOR.$PATCH"
+      - echo "🔧 Updating version in package.json..."
+      - |
+        python -c "
+import json
+with open('package.json', 'r') as f:
+    data = json.load(f)
+data['version'] = f'{os.environ.get("MAJOR")}.{os.environ.get("MINOR")}.{os.environ.get("PATCH")}'
+with open('package.json', 'w') as f:
+    json.dump(data, f, indent=2)
+"
       - echo "🧾 Contents of package.json after update:"
       - cat package.json
-
       - echo "🚀 Running Python app..."
       - python app.py
 
