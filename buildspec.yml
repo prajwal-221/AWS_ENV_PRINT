@@ -10,13 +10,18 @@ phases:
       - echo "✔ Version from pipeline: $MAJOR.$MINOR.$PATCH"
       - echo "🔧 Updating version in package.json..."
       - |
-        python -c "import os, json
-with open('package.json', 'r') as f:
-    data = json.load(f)
-data['version'] = f'{os.environ.get(\"MAJOR\")}.{os.environ.get(\"MINOR\")}.{os.environ.get(\"PATCH\")}'
+        python -c '
+import os
+import json
 
-with open('package.json', 'w') as f:
-    json.dump(data, f, indent=2)"
+with open("package.json", "r") as f:
+    data = json.load(f)
+
+data["version"] = f"{os.environ.get('MAJOR', '0')}.{os.environ.get('MINOR', '0')}.{os.environ.get('PATCH', '0')}"
+
+with open("package.json", "w") as f:
+    json.dump(data, f, indent=2)
+'
       - echo "🧾 Contents of package.json after update:"
       - cat package.json
       - echo "🚀 Running Python app..."
