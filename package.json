@@ -1,6 +1,6 @@
 {
   "name": "env-printer",
   "version": "0.0.0",
-  "description": "A sample app",
+  "description": "LedgerLink",
   "main": "app.py"
 }
