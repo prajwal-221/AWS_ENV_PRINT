@@ -4,6 +4,8 @@ phases:
   install:
     runtime-versions:
       python: 3.11
+    commands:
+      - echo "✅ Install phase complete"
 
   build:
     commands:
