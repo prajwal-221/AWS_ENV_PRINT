@@ -1,0 +1,24 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      python: 3.11
+  build:
+    commands:
+      - echo "📦 Updating version in package.json"
+      - VERSION="$MAJOR.$MINOR.$PATCH"
+      - echo "✔ Version from pipeline: $VERSION"
+      
+      # Use jq to update package.json version
+      - jq --arg v "$VERSION" '.version = $v' package.json > tmp.json && mv tmp.json package.json
+      
+      - echo "🧾 Contents of package.json after update:"
+      - cat package.json
+
+      - echo "🚀 Running Python app..."
+      - python app.py
+
+artifacts:
+  files:
+    - '**/*'
